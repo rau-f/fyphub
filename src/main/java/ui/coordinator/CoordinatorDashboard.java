@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.*;
 import repository.DataStore;
+import ui.ViewAnimations;
 import service.ProjectService;
 import service.ProposalService;
 import ui.LoginView;
@@ -186,6 +187,7 @@ public class CoordinatorDashboard {
                 sec2, approvedList, new Separator(),
                 sec3, projectsList);
         contentBox.setPadding(new Insets(32));
+        ViewAnimations.staggerChildren(contentBox);
     }
 
     public Scene getScene() { return scene; }

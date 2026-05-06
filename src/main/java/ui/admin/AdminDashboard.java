@@ -10,6 +10,7 @@ import model.*;
 import repository.DataStore;
 import repository.DatabaseManager;
 import ui.LoginView;
+import ui.ViewAnimations;
 import java.util.Map;
 
 public class AdminDashboard {
@@ -236,6 +237,7 @@ public class AdminDashboard {
                 sec2, usersList, new Separator(),
                 sec3, dbCard);
         contentBox.setPadding(new Insets(32));
+        ViewAnimations.staggerChildren(contentBox);
     }
 
     public Scene getScene() { return scene; }

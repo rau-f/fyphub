@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.*;
 import repository.DataStore;
+import ui.ViewAnimations;
 import service.ProjectService;
 import service.ProposalService;
 import ui.LoginView;
@@ -133,6 +134,7 @@ public class SupervisorDashboard {
 
         contentBox.getChildren().addAll(topBar, new Separator(), sec1, reviewList, new Separator(), sec2, projectsList);
         contentBox.setPadding(new Insets(32));
+        ViewAnimations.staggerChildren(contentBox);
     }
 
     public Scene getScene() { return scene; }

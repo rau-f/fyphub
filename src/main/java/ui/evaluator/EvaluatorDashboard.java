@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.*;
 import repository.DataStore;
+import ui.ViewAnimations;
 import service.EvaluationService;
 import ui.LoginView;
 import java.util.List;
@@ -114,6 +115,7 @@ public class EvaluatorDashboard {
 
         contentBox.getChildren().addAll(topBar, new Separator(), sec1, projectsList);
         contentBox.setPadding(new Insets(32));
+        ViewAnimations.staggerChildren(contentBox);
     }
 
     public Scene getScene() { return scene; }

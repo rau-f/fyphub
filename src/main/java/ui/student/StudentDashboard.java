@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.*;
 import repository.DataStore;
+import ui.ViewAnimations;
 import service.ProjectService;
 import ui.LoginView;
 import java.util.List;
@@ -123,6 +124,7 @@ public class StudentDashboard {
 
         contentBox.getChildren().addAll(topBar, new Separator(), statsRow, actionsRow, projectCard);
         contentBox.setPadding(new Insets(32));
+        ViewAnimations.staggerChildren(contentBox);
     }
 
     private VBox makeStatCard(String title, String value, String color) {

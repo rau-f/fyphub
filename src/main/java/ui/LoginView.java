@@ -5,9 +5,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import model.*;
 import service.AuthService;
@@ -22,37 +19,35 @@ public class LoginView {
     private final Scene scene;
 
     public LoginView(Stage stage) {
-        // --- Brand Section ---
-        Label brandIcon = new Label("\u2B22");
-        brandIcon.setStyle("-fx-font-size: 48px; -fx-text-fill: #6c63ff;");
 
-        Label brandTitle = new Label("FYP Hub");
-        brandTitle.getStyleClass().add("title-label");
-        brandTitle.setStyle("-fx-font-size: 36px; -fx-text-fill: #ffffff;");
+        // --- Accent bar ---
+        Region accentBar = new Region();
+        accentBar.setPrefHeight(4);
+        accentBar.setStyle("-fx-background-color: linear-gradient(to right, #6c5ce7, #00e5a0);");
 
-        Label brandSubtitle = new Label("Final Year Project Management");
-        brandSubtitle.getStyleClass().add("subtitle-label");
+        // --- Branding ---
+        Label logo = new Label("FYP Hub");
+        logo.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #ffffff;");
+        Label tagline = new Label("Final Year Project Management Platform");
+        tagline.setStyle("-fx-font-size: 13px; -fx-text-fill: #6666aa; -fx-font-weight: normal;");
+        VBox branding = new VBox(4, logo, tagline);
+        branding.setAlignment(Pos.CENTER);
+        branding.setPadding(new Insets(0, 0, 24, 0));
 
-        VBox brandBox = new VBox(8, brandIcon, brandTitle, brandSubtitle);
-        brandBox.setAlignment(Pos.CENTER);
-
-        // --- Login Form ---
-        Label formTitle = new Label("Sign In");
-        formTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #ffffff;");
-
-        Label emailLabel = new Label("Email");
+        // --- Form fields ---
+        Label emailLabel = new Label("Email Address");
         emailLabel.getStyleClass().add("info-label");
         TextField emailField = new TextField();
         emailField.setPromptText("Enter your email");
-        emailField.setPrefWidth(320);
-        emailField.setId("emailField");
+        emailField.setPrefHeight(44);
+        emailField.setMaxWidth(340);
 
-        Label passwordLabel = new Label("Password");
-        passwordLabel.getStyleClass().add("info-label");
+        Label passLabel = new Label("Password");
+        passLabel.getStyleClass().add("info-label");
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Enter your password");
-        passwordField.setPrefWidth(320);
-        passwordField.setId("passwordField");
+        passwordField.setPrefHeight(44);
+        passwordField.setMaxWidth(340);
 
         Label errorLabel = new Label();
         errorLabel.getStyleClass().add("error-label");
@@ -61,28 +56,27 @@ public class LoginView {
 
         Button loginBtn = new Button("Sign In");
         loginBtn.getStyleClass().add("button-primary");
-        loginBtn.setPrefWidth(320);
-        loginBtn.setPrefHeight(44);
-        loginBtn.setId("loginButton");
+        loginBtn.setPrefWidth(340);
+        loginBtn.setPrefHeight(46);
 
-        // --- Login action ---
         loginBtn.setOnAction(e -> {
             String email = emailField.getText().trim();
             String password = passwordField.getText().trim();
 
             if (email.isEmpty() || password.isEmpty()) {
-                errorLabel.setText("Please enter both email and password");
+                errorLabel.setText("Please enter both email and password.");
                 errorLabel.setVisible(true);
                 errorLabel.setManaged(true);
+                ViewAnimations.pulse(errorLabel);
                 return;
             }
 
             User user = AuthService.login(email, password);
-
             if (user == null) {
-                errorLabel.setText("Invalid email or password");
+                errorLabel.setText("Invalid credentials. Please try again.");
                 errorLabel.setVisible(true);
                 errorLabel.setManaged(true);
+                ViewAnimations.pulse(errorLabel);
                 return;
             }
 
@@ -107,47 +101,50 @@ public class LoginView {
 
         passwordField.setOnAction(e -> loginBtn.fire());
 
-        // --- Demo accounts hint ---
-        Label hintLabel = new Label("Demo: student1@nu.edu.pk / 1234");
-        hintLabel.setStyle("-fx-text-fill: #555577; -fx-font-size: 12px;");
+        // --- Demo accounts ---
+        Label hint = new Label("Demo Accounts");
+        hint.setStyle("-fx-font-size: 12px; -fx-text-fill: #5555aa; -fx-font-weight: bold;");
+        Label accounts = new Label(
+                "Student: student1@nu.edu.pk / 1234\n" +
+                "Coordinator: coord1@nu.edu.pk / 1234\n" +
+                "Supervisor: sup1@nu.edu.pk / 1234\n" +
+                "Evaluator: eval1@nu.edu.pk / 1234\n" +
+                "Admin: admin@nu.edu.pk / admin123");
+        accounts.setStyle("-fx-font-size: 11px; -fx-text-fill: #444466; -fx-line-spacing: 3;");
+        VBox hintBox = new VBox(6, hint, accounts);
+        hintBox.setAlignment(Pos.CENTER);
+        hintBox.setPadding(new Insets(16, 0, 0, 0));
 
-        VBox formFields = new VBox(6,
-                formTitle,
-                new Region() {
-                    {
-                        setPrefHeight(12);
-                    }
-                },
+        // --- Assemble card ---
+        VBox formBox = new VBox(6,
                 emailLabel, emailField,
-                new Region() {
-                    {
-                        setPrefHeight(4);
-                    }
-                },
-                passwordLabel, passwordField,
-                new Region() {
-                    {
-                        setPrefHeight(4);
-                    }
-                },
-                errorLabel,
-                loginBtn,
-                hintLabel);
-        formFields.setAlignment(Pos.CENTER_LEFT);
-        formFields.setPadding(new Insets(32));
-        formFields.setMaxWidth(400);
-        formFields.getStyleClass().add("card");
+                new Region() {{ setPrefHeight(4); }},
+                passLabel, passwordField,
+                new Region() {{ setPrefHeight(6); }},
+                errorLabel, loginBtn, hintBox);
+        formBox.setAlignment(Pos.CENTER_LEFT);
+        formBox.setMaxWidth(340);
 
-        // --- Center layout ---
-        VBox centerBox = new VBox(32, brandBox, formFields);
-        centerBox.setAlignment(Pos.CENTER);
-        centerBox.setPadding(new Insets(40));
+        VBox loginCard = new VBox(0, accentBar, new Region() {{ setPrefHeight(32); }}, branding, formBox);
+        loginCard.setAlignment(Pos.CENTER);
+        loginCard.setMaxWidth(420);
+        loginCard.setPadding(new Insets(0, 40, 40, 40));
+        loginCard.setStyle(
+                "-fx-background-color: rgba(14, 14, 36, 0.92);" +
+                "-fx-background-radius: 20;" +
+                "-fx-border-color: rgba(100, 100, 180, 0.1);" +
+                "-fx-border-radius: 20;" +
+                "-fx-border-width: 1;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 40, 0, 0, 12);");
 
-        StackPane root = new StackPane(centerBox);
-        root.setStyle("-fx-background-color: #0f0f1a;");
+        StackPane root = new StackPane(loginCard);
+        root.setAlignment(Pos.CENTER);
+        root.setStyle("-fx-background-color: linear-gradient(to bottom right, #08081a, #0d0d2b);");
 
         this.scene = new Scene(root, 1000, 700);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
+        ViewAnimations.slideUp(loginCard);
     }
 
     public Scene getScene() {

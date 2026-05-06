@@ -38,7 +38,7 @@ public class ProposalService {
     }
 
     public static Feedback requestRevision(String proposalID, String content,
-                                           float score, String supervisorID) {
+            float score, String supervisorID) {
         Proposal proposal = DataStore.getProposalByID(proposalID);
         if (proposal != null) {
             proposal.setStatus(ProposalStatus.REVISION_REQUIRED);
